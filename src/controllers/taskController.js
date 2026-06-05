@@ -59,6 +59,10 @@ const updateTask = async (req, res) => {
     const task = await Task.findById(taskId);
     if (!task) return res.status(404).json({ error: 'Task not found.' });
 
+    if (!req.projectMember) {
+      return res.status(403).json({ error: 'Access denied. You are not a member of this project.' });
+    }
+
     const userRole = req.projectMember.role;
     const { title, description, dueDate, priority, status, assignedToId } = req.body;
     const updateData = {};
